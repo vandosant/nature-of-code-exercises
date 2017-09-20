@@ -12,7 +12,7 @@ void setup()
 
 void draw() {
   w1.step();
-  w1.display(); 
+  w1.display();
 } 
 
 class Walker {
@@ -22,22 +22,16 @@ class Walker {
     x = width/2;
     y = height/2;
   }
-  
+
   void display() {
     stroke(10);
-    point(x,y);
+    point(x, y);
   }
-  
+
   void step() {
-    int choice = int(random(4));
-    if (choice == 0) {
-      x++; 
-    } else if (choice == 1) {
-      x--; 
-    } else if (choice == 2) {
-      y++; 
-    } else {
-      y--; 
-    }
+    int stepx = int(random(4)) - 1;
+    int stepy = int(random(3)) - 1;
+    x+=stepx;
+    y+=stepy;
   }
 }
