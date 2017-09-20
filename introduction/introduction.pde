@@ -4,8 +4,7 @@ Walker w1;
 
 void setup() 
 {
-  size(200, 200);
-  frameRate(30);
+  size(640, 240);
   w1 = new Walker();
   background(255);
 }
@@ -24,13 +23,13 @@ class Walker {
   }
 
   void display() {
-    stroke(10);
+    stroke(1);
     point(x, y);
   }
 
   void step() {
-    int stepx = int(random(4)) - 1;
-    int stepy = int(random(3)) - 1;
+    float stepx = random(-1, 2);
+    float stepy = random(-1, 2);
     x+=stepx;
     y+=stepy;
   }
