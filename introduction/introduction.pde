@@ -1,16 +1,27 @@
-int width = 200;
-int height = 200;
+import java.util.Random;
+
+int width = 640;
+int height = 240;
+float randx, randy;
+float sd = 2;
+float mean = 0.5;
 Walker w1;
+Random generatorx;
+Random generatory;
 
 void setup() 
 {
   size(640, 240);
   w1 = new Walker();
+  generatorx = new Random();
+  generatory = new Random();
   background(255);
 }
 
 void draw() {
-  w1.step();
+  randx = (float) generatorx.nextGaussian();
+  randy = (float) generatorx.nextGaussian();
+  w1.step(randx, randy);
   w1.display();
 } 
 
@@ -27,23 +38,8 @@ class Walker {
     point(x, y);
   }
 
-  void step() {
-    float stepx = random(-1, 1);
-    float stepy = random(-1, 1);
-    if (stepx <= 0) {
-      if (mouseX > x) {
-        x+=1;
-      } else {
-        x-=1;
-      }
-      if (mouseY > y) {
-        y+=1;
-      } else {
-        y-=1;
-      }
-    } else {
-      x+=stepx;
-      y+=stepy;
-    }
+  void step(float randx, float randy) {
+    x+=sd * randx + mean;
+    y+=sd * randy + mean;
   }
 }
