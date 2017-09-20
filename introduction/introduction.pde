@@ -28,8 +28,9 @@ class Walker {
   }
 
   void step() {
-    float rand = random(1);
-    if (rand < 0.5) {
+    float stepx = random(-1, 1);
+    float stepy = random(-1, 1);
+    if (stepx <= 0) {
       if (mouseX > x) {
         x+=1;
       } else {
@@ -40,6 +41,9 @@ class Walker {
       } else {
         y-=1;
       }
+    } else {
+      x+=stepx;
+      y+=stepy;
     }
   }
 }
