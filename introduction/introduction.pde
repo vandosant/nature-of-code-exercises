@@ -1,12 +1,15 @@
 int width = 640;
-int height = 240;
+int height = 640;
+float xoff, yoff;
 Walker w1;
 
 void setup() 
 {
-  size(640, 240);
+  size(640, 640);
+  background(22, 20, 38);
   w1 = new Walker();
-  background(255);
+  xoff = 0;
+  yoff = 8888;
 }
 
 void draw() {
@@ -15,33 +18,34 @@ void draw() {
 } 
 
 class Walker {
-  int x;
-  int y;
+  float x, y, prevX, prevY;
+
   Walker() {
     x = width/2;
     y = height/2;
   }
 
   void display() {
-    stroke(0);
+    stroke(140, 31, 71);
     point(x, y);
+    line(prevX, prevY, x, y);
   }
 
   void step() {
-    float stepsize = montecarlo()*50;
-    float stepx = random(-1,1);
-    float stepy = random(-1,1);
-    x += stepx * stepsize;
-    y += stepy * stepsize;
-    x = constrain(x, 0, width - 1);
-    y = constrain(y, 0, height - 1);
+    prevX = x;
+    prevY = y;
+    float stepsize = montecarlo()*1.5;
+    xoff += stepsize;
+    yoff += stepsize;
+    x = map(noise(xoff), 0, 1, 0, width);
+    y = map(noise(yoff), 0, 1, 0, height);
   }
 }
 
 float montecarlo() {
   while (true) {
     float r1 = random(1);
-    float p = pow(1.0 - r1, 8);
+    float p = pow(1.0 - r1, 24);
     float r2 = random(1);
     if (r2 < p) {
       return r1;
