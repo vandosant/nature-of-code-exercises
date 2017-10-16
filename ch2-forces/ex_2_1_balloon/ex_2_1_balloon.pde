@@ -1,35 +1,40 @@
 int width = 640;
 int height = 640;
-Mover w;
+Mover[] movers = new Mover[10];
 
 void setup() 
 {
   size(640, 640);
-  w = new Mover(140, 31, 71);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(140, 31, 71, random(10));
+  }
 }
 
 void draw() {
   background(22, 20, 38);
-  w.update();
-  w.display();
+  for (int i = 0; i < movers.length; i++) {
+    movers[i].update();
+    movers[i].display();
+  }
 }
 
 class Mover {
-  PVector location, velocity, acceleration, wind, helium;
+  PVector location, velocity, acceleration, wind, helium, gravity;
   int r, g, b;
-  float offset;
-  float mass = 10.0;
+  float offset, mass;
 
-  Mover(int r, int g, int b) {
+  Mover(int r, int g, int b, float mass) {
     location = new PVector(0, height);
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
-    helium = new PVector(0, -0.1);
+    helium = new PVector(0, -0.2*mass);
+    gravity = new PVector(0, 0.1*mass);
     wind = new PVector(0, 0);
     offset = random(8888);
     this.r = r;
     this.g = g;
     this.b = b;
+    this.mass = mass;
   }
 
   void display() {
@@ -37,7 +42,7 @@ class Mover {
     noFill();
     ellipse(
       location.x, location.y,
-      10, 10
+      10*mass, 10*mass
     );
     smooth();
   }
@@ -49,6 +54,7 @@ class Mover {
 
     applyForce(wind);
     applyForce(helium);
+    applyForce(gravity);
 
     velocity.add(acceleration);
     location.add(velocity);
