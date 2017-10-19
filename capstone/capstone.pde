@@ -1,26 +1,49 @@
-int width = 640;
-int height = 640;
+int width = 1440;
+int height = 900;
 Mover w, w1, w2, w3;
+Mover[] Movers1 = new Mover[int(random(33, 66))];
+Mover[] Movers2 = new Mover[int(random(33, 66))];
+Mover[] Movers3 = new Mover[int(random(33, 66))];
+Mover[] Movers4 = new Mover[int(random(33, 66))];
+int[] colors = {140, 31, 71};
+
+
 
 void setup() 
 {
-  size(640, 640);
-  w = new Mover(140, 31, 71);
-  w1 = new Mover(217, 34, 59);
-  w2 = new Mover(242, 195, 53);
-  w3 = new Mover(242, 123, 39);
+  size(1440, 900);
+  for (int i = 0; i < Movers1.length; i++) {
+    Movers1[i] = new Mover(140, 31, 71, new PVector(random(0, width), random(0, height)));
+  }
+  for (int i = 0; i < Movers2.length; i++) {
+    Movers2[i] = new Mover(217, 34, 59, new PVector(random(0, width), random(0, height)));
+  }
+  for (int i = 0; i < Movers3.length; i++) {
+    Movers3[i] = new Mover(242, 195, 53, new PVector(random(0, width), random(0, height)));
+  }
+  for (int i = 0; i < Movers4.length; i++) {
+    Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
+  }
 }
 
 void draw() {
   background(22, 20, 38);
-  w.update();
-  w.display();
-  w1.update();
-  w1.display();
-  w2.update();
-  w2.display();
-  w3.update();
-  w3.display();
+  for (int i = 0; i < Movers1.length; i++) {
+    Movers1[i].update();
+    Movers1[i].display();
+  }
+  for (int i = 0; i < Movers2.length; i++) {
+    Movers2[i].update();
+    Movers2[i].display();
+  }
+  for (int i = 0; i < Movers3.length; i++) {
+    Movers3[i].update();
+    Movers3[i].display();
+  }
+  for (int i = 0; i < Movers4.length; i++) {
+    Movers4[i].update();
+    Movers4[i].display();
+  }
 }
 
 class Mover {
@@ -28,8 +51,8 @@ class Mover {
   int r, g, b;
   float topspeed;
 
-  Mover(int r, int g, int b) {
-    location = new PVector(width/2, height/2);
+  Mover(int r, int g, int b, PVector start_location) {
+    location = start_location;
     velocity = new PVector(0, 0);
     acceleration = new PVector(-0.001, 0.002);
     prev = new PVector(location.x, location.y);
