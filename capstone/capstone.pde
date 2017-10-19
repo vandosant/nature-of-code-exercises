@@ -6,7 +6,7 @@ Mover[] Movers2 = new Mover[int(random(33, 66))];
 Mover[] Movers3 = new Mover[int(random(33, 66))];
 Mover[] Movers4 = new Mover[int(random(33, 66))];
 Flyer[] Flyers1 = new Flyer[int(random(33, 66))];
-Waver[] Wavers1 = new Waver[int(random(10, 20))];
+Waver[] Wavers1 = new Waver[int(random(100, 200))];
 
 void setup() 
 {
@@ -24,7 +24,7 @@ void setup()
     Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
   }
   int flyer_r = int(random(10, 55));
-  int flyer_g = int(random(40, 210));
+  int flyer_g = int(random(40, 145));
   int flyer_b = int(random(80, 255));
   for (int i = 0; i < Flyers1.length; i++) {
     Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)));
@@ -37,12 +37,23 @@ void setup()
   windEast = updateWindEastern(wind_offset);
   windWest = updateWindWestern(wind_offset);
   for (int i = 0; i < Wavers1.length; i++) {
-    Wavers1[i] = new Waver(waver_r, waver_g, waver_b, new PVector(width / 2 + (random(10) * i), height / 2));
+    Wavers1[i] = new Waver(
+      waver_r,
+      waver_g,
+      waver_b,
+      new PVector(
+        random(width),
+        height - 100
+      )
+     );
   }
 }
 
 void draw() {
   background(22, 20, 38);
+  stroke(205,105,80);
+  fill(205,105,80);
+  rect(0, height - 69, width, 70);
   for (int i = 0; i < Movers1.length; i++) {
     Movers1[i].update();
     Movers1[i].display();
@@ -283,8 +294,8 @@ class Waver {
   }
 
   void checkEdges() {
-    if (location.x > start_location.x + 30) {
-      location.x = start_location.x + 30;
+    if (location.x > start_location.x + 20) {
+      location.x = start_location.x + 20;
     }
     if (location.x < start_location.x - 10) {
       location.x = start_location.x - 10;
@@ -304,7 +315,7 @@ float montecarlo() {
 }
 
 PVector updateWindEastern(float offset) {
-  return new PVector(map(noise(offset), 0, 1, 0, 0.05), 0);
+  return new PVector(map(noise(offset), 0, 1, 0, 0.07), 0);
 }
 
 PVector updateWindWestern(float offset) {
