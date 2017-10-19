@@ -20,11 +20,11 @@ void setup()
   for (int i = 0; i < Movers4.length; i++) {
     Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
   }
-  int flyer_r = int(random(10, 255));
-  int flyer_g = int(random(10, 255));
-  int flyer_b = int(random(10, 355));
+  int flyer_r = int(random(10, 55));
+  int flyer_g = int(random(40, 210));
+  int flyer_b = int(random(80, 255));
   for (int i = 0; i < Flyers1.length; i++) {
-    Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(10*i, height / 2));
+    Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)));
   }
 }
 
@@ -147,9 +147,9 @@ class Flyer {
 
   void display() {
     stroke(r, g, b);
-
     ellipse(
-      location.x, location.y,
+      location.x,
+      location.y,
       10,
       10
     );
