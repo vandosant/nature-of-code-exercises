@@ -24,7 +24,7 @@ void setup()
   int flyer_g = int(random(10, 255));
   int flyer_b = int(random(10, 355));
   for (int i = 0; i < Flyers1.length; i++) {
-    Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(0, height / 2));
+    Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(10*i, height / 2));
   }
 }
 
@@ -130,21 +130,19 @@ class Mover {
 }
 
 class Flyer {
-  PVector location, velocity, prev, acceleration, offset;
+  PVector location, velocity, acceleration, offset;
   int r, g, b;
-  float topspeed_x, topspeed_y;
+  float topspeed;
 
   Flyer(int r, int g, int b, PVector start_location) {
     location = start_location;
     velocity = new PVector(0, 0);
-    acceleration = new PVector(random(0.02, 0.04), 0);
-    prev = new PVector(location.x, location.y);
-    offset = new PVector(random(88), random(88));
+    acceleration = new PVector(random(0.4, 0.4), 2);
+    offset = new PVector(random(8), random(8));
     this.r = r;
     this.g = g;
     this.b = b;
-    topspeed_x = random(0.2, 1);
-    topspeed_y = random(1.1, 3);
+    topspeed = 3;
   }
 
   void display() {
@@ -161,20 +159,20 @@ class Flyer {
   void update() {
     checkEdges();
     float stepsize = montecarlo()*1.5;
-    offset.x += stepsize;
     offset.y += stepsize;
-    acceleration.y = map(noise(offset.y), 0, 1, -topspeed_y, topspeed_y);
+    acceleration = new PVector(1, map(noise(offset.y), 0, 1, -1, 0.05));
     velocity.add(acceleration);
-    velocity.limit(topspeed_y);
+    velocity.limit(topspeed);
     location.add(velocity);
+    acceleration.mult(0);
   }
   
-  void limit(float max_x, float max_y) {
-    if (velocity.x > max_x) {
-      velocity.x = max_x; 
+  void limit(float max) {
+    if (velocity.x > max) {
+      velocity.x = max;
     }
-    if (velocity.y > max_y) {
-      velocity.y = max_y; 
+    if (velocity.y > max) {
+      velocity.y = max;
     }
   }
   
