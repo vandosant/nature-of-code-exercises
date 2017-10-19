@@ -1,9 +1,12 @@
 Mover w, w1, w2, w3;
+PVector windEast, windWest;
+float wind_offset;
 Mover[] Movers1 = new Mover[int(random(33, 66))];
 Mover[] Movers2 = new Mover[int(random(33, 66))];
 Mover[] Movers3 = new Mover[int(random(33, 66))];
 Mover[] Movers4 = new Mover[int(random(33, 66))];
 Flyer[] Flyers1 = new Flyer[int(random(33, 66))];
+Waver[] Wavers1 = new Waver[int(random(10, 20))];
 
 void setup() 
 {
@@ -25,6 +28,16 @@ void setup()
   int flyer_b = int(random(80, 255));
   for (int i = 0; i < Flyers1.length; i++) {
     Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)));
+  }
+
+  int waver_r = int(random(10, 55));
+  int waver_g = int(random(100, 210));
+  int waver_b = int(random(0, 80));
+  wind_offset = random(8888);
+  windEast = updateWindEastern(wind_offset);
+  windWest = updateWindWestern(wind_offset);
+  for (int i = 0; i < Wavers1.length; i++) {
+    Wavers1[i] = new Waver(waver_r, waver_g, waver_b, new PVector(width / 2 + (random(10) * i), height / 2));
   }
 }
 
@@ -50,6 +63,18 @@ void draw() {
   for (int i = 0; i < Flyers1.length; i++) {
     Flyers1[i].update();
     Flyers1[i].display();
+  }
+
+  float stepsize = montecarlo()*1.5;
+  wind_offset += stepsize;
+  windEast = updateWindEastern(wind_offset);
+  windWest = updateWindWestern(wind_offset);
+
+  for (int i = 0; i < Wavers1.length; i++) {
+    Wavers1[i].applyForce(windEast);
+    Wavers1[i].applyForce(windWest);
+    Wavers1[i].update();
+    Wavers1[i].display();
   }
 }
 
@@ -201,4 +226,87 @@ class Flyer {
       }
     }
   }
+}
+
+
+class Waver {
+  PVector start_location, location, velocity, acceleration;
+  int r, g, b;
+  float topspeed;
+  PVector wind = new PVector(0.01, 0);
+
+  Waver(int r, int g, int b, PVector start_location) {
+    location = new PVector(start_location.x, start_location.y);
+    velocity = new PVector(0, 0);
+    acceleration = new PVector(random(0.4, 0.4), 0);
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.start_location = new PVector(start_location.x, start_location.y);
+    topspeed = 3;
+  }
+
+  void display() {
+    stroke(r, g, b);
+    curve(
+      start_location.x - 60,
+      start_location.y - 30,
+      location.x,
+      location.y,
+      start_location.x,
+      start_location.y + 30,
+      start_location.x,
+      start_location.y
+    );
+    smooth();
+  }
+
+  void update() {
+    checkEdges();
+    velocity.add(acceleration);
+    velocity.limit(topspeed);
+    location.add(velocity);
+    acceleration.mult(0);
+  }
+
+  void applyForce(PVector force) {
+    acceleration.add(force);
+  }
+
+  void limit(float max) {
+    if (velocity.x > max) {
+      velocity.x = max;
+    }
+    if (velocity.y > max) {
+      velocity.y = max;
+    }
+  }
+
+  void checkEdges() {
+    if (location.x > start_location.x + 30) {
+      location.x = start_location.x + 30;
+    }
+    if (location.x < start_location.x - 10) {
+      location.x = start_location.x - 10;
+    }
+  }
+}
+
+float montecarlo() {
+  while (true) {
+    float r1 = random(-1, 1);
+    float p = pow(1.0 - r1, 1.5);
+    float r2 = random(1);
+    if (r2 < p) {
+      return r1;
+    }
+  }
+}
+
+PVector updateWindEastern(float offset) {
+  return new PVector(map(noise(offset), 0, 1, 0, 0.05), 0);
+}
+
+PVector updateWindWestern(float offset) {
+  return new PVector(map(noise(offset), 0, 1, -0.05, 0), 0);
 }
