@@ -1,12 +1,12 @@
 Mover w, w1, w2, w3;
 PVector windEast, windWest;
 float wind_offset;
-Mover[] Movers1 = new Mover[int(random(33, 66))];
-Mover[] Movers2 = new Mover[int(random(33, 66))];
-Mover[] Movers3 = new Mover[int(random(33, 66))];
-Mover[] Movers4 = new Mover[int(random(33, 66))];
-Flyer[] Flyers1 = new Flyer[int(random(33, 66))];
-Waver[] Wavers1 = new Waver[int(random(100, 200))];
+Mover[] Movers1 = new Mover[int(random(5,33))];
+Mover[] Movers2 = new Mover[int(random(5,33))];
+Mover[] Movers3 = new Mover[int(random(5,33))];
+Mover[] Movers4 = new Mover[int(random(5, 33))];
+Flyer[] Flyers1 = new Flyer[int(random(49, 99))];
+Waver[] Wavers1 = new Waver[int(random(840, 1000))];
 
 void setup() 
 {
@@ -24,7 +24,7 @@ void setup()
     Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
   }
   int flyer_r = int(random(10, 55));
-  int flyer_g = int(random(40, 145));
+  int flyer_g = int(random(80, 145));
   int flyer_b = int(random(80, 255));
   for (int i = 0; i < Flyers1.length; i++) {
     Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)));
@@ -37,14 +37,16 @@ void setup()
   windEast = updateWindEastern(wind_offset);
   windWest = updateWindWestern(wind_offset);
   for (int i = 0; i < Wavers1.length; i++) {
+    float mass = random(5, 10);
     Wavers1[i] = new Waver(
       waver_r,
       waver_g,
       waver_b,
       new PVector(
-        random(width),
-        height - 100
-      )
+        random(-20, width + 20),
+        height - 70
+      ),
+      mass
      );
   }
 }
@@ -76,7 +78,7 @@ void draw() {
     Flyers1[i].display();
   }
 
-  float stepsize = montecarlo()*1.5;
+  float stepsize = montecarlo()*55.5;
   wind_offset += stepsize;
   windEast = updateWindEastern(wind_offset);
   windWest = updateWindWestern(wind_offset);
@@ -243,10 +245,10 @@ class Flyer {
 class Waver {
   PVector start_location, location, velocity, acceleration;
   int r, g, b;
-  float topspeed;
+  float topspeed, mass;
   PVector wind = new PVector(0.01, 0);
 
-  Waver(int r, int g, int b, PVector start_location) {
+  Waver(int r, int g, int b, PVector start_location, float mass) {
     location = new PVector(start_location.x, start_location.y);
     velocity = new PVector(0, 0);
     acceleration = new PVector(random(0.4, 0.4), 0);
@@ -254,20 +256,21 @@ class Waver {
     this.g = g;
     this.b = b;
     this.start_location = new PVector(start_location.x, start_location.y);
+    this.mass = mass;
     topspeed = 3;
   }
 
   void display() {
     stroke(r, g, b);
     curve(
-      start_location.x - 60,
-      start_location.y - 30,
+      start_location.x + 7*mass,
+      start_location.y - 5 *mass,
+      start_location.x,
+      start_location.y,
       location.x,
-      location.y,
-      start_location.x,
-      start_location.y + 30,
-      start_location.x,
-      start_location.y
+      location.y - 5 * mass,
+      start_location.x + 2*mass,
+      start_location.y - 3*mass
     );
     smooth();
   }
@@ -281,7 +284,8 @@ class Waver {
   }
 
   void applyForce(PVector force) {
-    acceleration.add(force);
+    PVector f = PVector.div(force, mass);
+    acceleration.add(f);
   }
 
   void limit(float max) {
@@ -315,9 +319,9 @@ float montecarlo() {
 }
 
 PVector updateWindEastern(float offset) {
-  return new PVector(map(noise(offset), 0, 1, 0, 0.07), 0);
+  return new PVector(map(noise(offset), 0, 1, 0, 0.01), 0);
 }
 
 PVector updateWindWestern(float offset) {
-  return new PVector(map(noise(offset), 0, 1, -0.05, 0), 0);
+  return new PVector(map(noise(offset), 0, 1, -0.01, 0), 0);
 }
