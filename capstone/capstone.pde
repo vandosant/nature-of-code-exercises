@@ -11,6 +11,19 @@ Waver[] Wavers1 = new Waver[int(random(400, 800))];
 void setup() 
 {
   size(1440, 900);
+
+  wind_offset = random(8888);
+  windEast = updateWindEastern(wind_offset);
+  windWest = updateWindWestern(wind_offset);
+
+  int flyer_r = int(random(10, 55));
+  int flyer_g = int(random(80, 145));
+  int flyer_b = int(random(80, 255));
+
+  int waver_r = int(random(10, 55));
+  int waver_g = int(random(100, 210));
+  int waver_b = int(random(0, 80));
+
   for (int i = 0; i < Movers1.length; i++) {
     Movers1[i] = new Mover(140, 31, 71, new PVector(random(0, width), random(0, height)));
   }
@@ -23,19 +36,18 @@ void setup()
   for (int i = 0; i < Movers4.length; i++) {
     Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
   }
-  int flyer_r = int(random(10, 55));
-  int flyer_g = int(random(80, 145));
-  int flyer_b = int(random(80, 255));
+
   for (int i = 0; i < Flyers1.length; i++) {
-    Flyers1[i] = new Flyer(flyer_r, flyer_g, flyer_b, new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)));
+    float mass = random(10, 20);
+      Flyers1[i] = new Flyer(
+      flyer_r,
+      flyer_g,
+      flyer_b,
+      new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)),
+      mass
+    );
   }
 
-  int waver_r = int(random(10, 55));
-  int waver_g = int(random(100, 210));
-  int waver_b = int(random(0, 80));
-  wind_offset = random(8888);
-  windEast = updateWindEastern(wind_offset);
-  windWest = updateWindWestern(wind_offset);
   for (int i = 0; i < Wavers1.length; i++) {
     float mass = random(7, 10);
     Wavers1[i] = new Waver(
@@ -153,33 +165,23 @@ class Mover {
       location.x = 0;
     }
   }
-  
-  float montecarlo() {
-    while (true) {
-      float r1 = random(-1, 1);
-      float p = pow(1.0 - r1, 1.5);
-      float r2 = random(1);
-      if (r2 < p) {
-        return r1;
-      }
-    }
-  }
 }
 
 class Flyer {
   PVector location, velocity, acceleration, offset;
   int r, g, b;
-  float topspeed;
+  float topspeed, mass;
 
-  Flyer(int r, int g, int b, PVector start_location) {
-    location = start_location;
-    velocity = new PVector(0, 0);
-    acceleration = new PVector(random(0.4, 0.4), 2);
-    offset = new PVector(random(8), random(8));
+  Flyer(int r, int g, int b, PVector location, float mass) {
+    this.location = location;
+    this.velocity = new PVector(0, 0);
+    this.acceleration = new PVector(random(0.4, 0.4), 2);
+    this.offset = new PVector(random(8), random(8));
     this.r = r;
     this.g = g;
     this.b = b;
-    topspeed = 3;
+    this.mass = mass;
+    this.topspeed = 3;
   }
 
   void display() {
@@ -187,8 +189,8 @@ class Flyer {
     ellipse(
       location.x,
       location.y,
-      10,
-      10
+      mass,
+      mass
     );
     smooth();
   }
@@ -197,7 +199,7 @@ class Flyer {
     checkEdges();
     float stepsize = montecarlo()*1.5;
     offset.y += stepsize;
-    acceleration = new PVector(1, map(noise(offset.y), 0, 1, -1, 0.05));
+    applyForce(new PVector(1, map(noise(offset.y), 0, 1, -1, 0.05)));
     velocity.add(acceleration);
     velocity.limit(topspeed);
     location.add(velocity);
@@ -213,6 +215,11 @@ class Flyer {
     }
   }
   
+  void applyForce(PVector force) {
+    PVector f = PVector.div(force, mass);
+    acceleration.add(f);
+  }
+
   void checkEdges() {
     if (location.y < 0) {
       location.y = height; 
@@ -225,17 +232,6 @@ class Flyer {
     }
     if (location.x > width) {
       location.x = 0;
-    }
-  }
-  
-  float montecarlo() {
-    while (true) {
-      float r1 = random(-1, 1);
-      float p = pow(1.0 - r1, 1.5);
-      float r2 = random(1);
-      if (r2 < p) {
-        return r1;
-      }
     }
   }
 }
