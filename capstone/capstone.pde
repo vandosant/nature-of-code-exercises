@@ -31,28 +31,47 @@ void setup()
     colors.set("red", 140);
     colors.set("green", 31 );
     colors.set("blue", 71);
-    Movers1[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
+    Movers1[i] = new Mover(
+      colors,
+      new PVector(
+        random(0, width),
+        random(0, height)
+      ),
+      random(3, 5)
+    );
   }
   for (int i = 0; i < Movers2.length; i++) {
     IntDict colors = new IntDict();
     colors.set("red", 217);
     colors.set("green", 34);
     colors.set("blue", 59);
-    Movers2[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
+    Movers2[i] = new Mover(
+      colors,
+      new PVector(random(0, width), random(0, height)),
+      random(3, 5)
+    );
   }
   for (int i = 0; i < Movers3.length; i++) {
     IntDict colors = new IntDict();
     colors.set("red", 242);
     colors.set("green", 195);
     colors.set("blue", 53);
-    Movers3[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
+    Movers3[i] = new Mover(
+      colors,
+      new PVector(random(0, width), random(0, height)),
+      random(3, 5)
+    );
   }
   for (int i = 0; i < Movers4.length; i++) {
     IntDict colors = new IntDict();
     colors.set("red", 242);
     colors.set("green", 123);
     colors.set("blue", 39);
-    Movers4[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
+    Movers4[i] = new Mover(
+      colors,
+      new PVector(random(0, width), random(0, height)),
+      random(3, 5)
+    );
   }
 
   for (int i = 0; i < Flyers1.length; i++) {
@@ -119,15 +138,16 @@ void draw() {
 class Mover {
   PVector location, velocity, acceleration, offset;
   IntDict colors;
-  float topspeed;
+  float topspeed, mass;
 
-  Mover(IntDict colors, PVector location) {
+  Mover(IntDict colors, PVector location, float mass) {
     this.location = location;
     this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(-0.001, 0.002);
     this.offset = new PVector(random(8888), random(8888));
     this.colors = colors;
     this.topspeed = random(0.3, 0.8);
+    this.mass = mass;
   }
 
   void display() {
@@ -135,8 +155,8 @@ class Mover {
     noFill();
     triangle(
       location.x, location.y,
-      location.x + 5, location.y + 10,
-      location.x - 5, location.y + 10
+      location.x + (mass / 2), location.y + mass,
+      location.x - (mass / 2), location.y + mass
     );
     smooth();
   }
@@ -146,13 +166,17 @@ class Mover {
     float stepsize = montecarlo()*1.5;
     offset.x += stepsize;
     offset.y += stepsize;
-    acceleration.x = map(noise(offset.x), 0, 1, -topspeed, topspeed);
-    acceleration.y = map(noise(offset.y), 0, 1, -topspeed, topspeed);
+    PVector walk = new PVector(
+      map(noise(offset.x), 0, 1, -topspeed, topspeed),
+      map(noise(offset.y), 0, 1, -topspeed, topspeed)
+    );
+    applyForce(walk);
     velocity.add(acceleration);
     velocity.limit(topspeed);
     location.add(velocity);
+    acceleration.mult(0);
   }
-  
+
   void limit(float max) {
     if (velocity.x > max) {
       velocity.x = max; 
@@ -161,7 +185,12 @@ class Mover {
       velocity.y = max; 
     }
   }
-  
+
+  void applyForce(PVector force) {
+    PVector f = PVector.div(force, mass);
+    acceleration.add(f);
+  }
+
   void checkEdges() {
     if (location.y < 0) {
       location.y = height; 
