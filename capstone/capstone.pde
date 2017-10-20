@@ -16,33 +16,49 @@ void setup()
   windEast = updateWindEastern(wind_offset);
   windWest = updateWindWestern(wind_offset);
 
-  int flyer_r = int(random(10, 55));
-  int flyer_g = int(random(80, 145));
-  int flyer_b = int(random(80, 255));
+  IntDict flyerColors = new IntDict();
+  flyerColors.set("red", int(random(10, 55)));
+  flyerColors.set("green", int(random(80, 145)));
+  flyerColors.set("blue", int(random(80, 255)));
 
-  int waver_r = int(random(10, 55));
-  int waver_g = int(random(100, 210));
-  int waver_b = int(random(0, 80));
+  IntDict waverColors = new IntDict();
+  waverColors.set("red", int(random(10, 55)));
+  waverColors.set("green", int(random(100, 210)));
+  waverColors.set("blue", int(random(0, 80)));
 
   for (int i = 0; i < Movers1.length; i++) {
-    Movers1[i] = new Mover(140, 31, 71, new PVector(random(0, width), random(0, height)));
+    IntDict colors = new IntDict();
+    colors.set("red", 140);
+    colors.set("green", 31 );
+    colors.set("blue", 71);
+    Movers1[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
   }
   for (int i = 0; i < Movers2.length; i++) {
-    Movers2[i] = new Mover(217, 34, 59, new PVector(random(0, width), random(0, height)));
+    IntDict colors = new IntDict();
+    colors.set("red", 217);
+    colors.set("green", 34);
+    colors.set("blue", 59);
+    Movers2[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
   }
   for (int i = 0; i < Movers3.length; i++) {
-    Movers3[i] = new Mover(242, 195, 53, new PVector(random(0, width), random(0, height)));
+    IntDict colors = new IntDict();
+    colors.set("red", 242);
+    colors.set("green", 195);
+    colors.set("blue", 53);
+    Movers3[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
   }
   for (int i = 0; i < Movers4.length; i++) {
-    Movers4[i] = new Mover(242, 123, 39, new PVector(random(0, width), random(0, height)));
+    IntDict colors = new IntDict();
+    colors.set("red", 242);
+    colors.set("green", 123);
+    colors.set("blue", 39);
+    Movers4[i] = new Mover(colors, new PVector(random(0, width), random(0, height)));
   }
 
   for (int i = 0; i < Flyers1.length; i++) {
-    float mass = random(10, 20);
+    float mass = random(8, 13);
       Flyers1[i] = new Flyer(
-      flyer_r,
-      flyer_g,
-      flyer_b,
+      flyerColors,
       new PVector(random(5, 11)*i+1, height / 2 + random(0, 5)),
       mass
     );
@@ -51,9 +67,7 @@ void setup()
   for (int i = 0; i < Wavers1.length; i++) {
     float mass = random(7, 10);
     Wavers1[i] = new Waver(
-      waver_r,
-      waver_g,
-      waver_b,
+      waverColors,
       new PVector(
         random(-20, width + 20),
         height - 70
@@ -103,24 +117,21 @@ void draw() {
 }
 
 class Mover {
-  PVector location, velocity, prev, acceleration, offset;
-  int r, g, b;
+  PVector location, velocity, acceleration, offset;
+  IntDict colors;
   float topspeed;
 
-  Mover(int r, int g, int b, PVector start_location) {
-    location = start_location;
-    velocity = new PVector(0, 0);
-    acceleration = new PVector(-0.001, 0.002);
-    prev = new PVector(location.x, location.y);
-    offset = new PVector(random(8888), random(8888));
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    topspeed = random(0.3, 0.8);
+  Mover(IntDict colors, PVector location) {
+    this.location = location;
+    this.velocity = new PVector(0, 0);
+    this.acceleration = new PVector(-0.001, 0.002);
+    this.offset = new PVector(random(8888), random(8888));
+    this.colors = colors;
+    this.topspeed = random(0.3, 0.8);
   }
 
   void display() {
-    stroke(r, g, b);
+    stroke(colors.get("red"), colors.get("green"), colors.get("blue"));
     noFill();
     triangle(
       location.x, location.y,
@@ -169,23 +180,25 @@ class Mover {
 
 class Flyer {
   PVector location, velocity, acceleration, offset;
-  int r, g, b;
+  IntDict colors;
   float topspeed, mass;
 
-  Flyer(int r, int g, int b, PVector location, float mass) {
+  Flyer(IntDict colors, PVector location, float mass) {
     this.location = location;
     this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(random(0.4, 0.4), 2);
     this.offset = new PVector(random(8), random(8));
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.mass = mass;
+    this.colors = colors;
     this.topspeed = 3;
+    this.mass = mass;
   }
 
   void display() {
-    stroke(r, g, b);
+    stroke(
+      colors.get("red"),
+      colors.get("green"),
+      colors.get("blue")
+    );
     ellipse(
       location.x,
       location.y,
@@ -239,23 +252,25 @@ class Flyer {
 
 class Waver {
   PVector start_location, location, velocity, acceleration;
-  int r, g, b;
+  IntDict colors;
   float topspeed, mass;
 
-  Waver(int r, int g, int b, PVector start_location, float mass) {
+  Waver(IntDict colors, PVector start_location, float mass) {
     this.start_location = new PVector(start_location.x, start_location.y);
     this.location = new PVector(start_location.x, start_location.y);
     this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(0, 0);
+    this.colors = colors;
     this.topspeed = 3;
-    this.r = r;
-    this.g = g;
-    this.b = b;
     this.mass = mass;
   }
 
   void display() {
-    stroke(r, g, b);
+    stroke(
+      colors.get("red"),
+      colors.get("green"),
+      colors.get("blue")
+    );
     curve(
       start_location.x + 6*mass,
       start_location.y - 5*mass,
