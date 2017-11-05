@@ -13,6 +13,16 @@ void setup()
 void draw() {
   background(22, 20, 38);
   for (int i = 0; i < movers.length; i++) {
+    PVector windowX = new PVector(0.001, 0);
+    float x = movers[i].location.x;
+    if (x < height / 2) {
+      PVector thisWindowX = PVector.mult(windowX, (height / 2) + (height - x));
+      movers[i].applyForce(thisWindowX);
+    } else {
+      PVector thisWindowX = PVector.mult(windowX, -1 * ((height / 2) + x));
+      movers[i].applyForce(thisWindowX);
+    }
+
     movers[i].update();
     movers[i].display();
   }
@@ -27,11 +37,6 @@ class Mover {
     location = new PVector(0, height);
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
-    helium = new PVector(0, -0.2*mass);
-    gravity = new PVector(0, 0.1*mass);
-    wind = new PVector(0, 0);
-    window = new PVector(0, 0);
-    offset = random(8888);
     this.r = r;
     this.g = g;
     this.b = b;
@@ -49,15 +54,6 @@ class Mover {
   }
 
   void update() {
-    float stepsize = montecarlo()*1.5;
-    offset += stepsize;
-    wind.x = map(noise(offset), 0, 1, 0, 0.01);
-
-    applyForce(wind);
-    applyForce(helium);
-    applyForce(gravity);
-    applyForce(window);
-
     velocity.add(acceleration);
     location.add(velocity);
     acceleration.mult(0);
@@ -80,12 +76,15 @@ class Mover {
   }
   
   void checkEdges() {
-    if (location.y < 100) {
-      window = new PVector(0, 0.8*mass);
+    if (location.y > width) {
+      location.y = width;
+      velocity.y *= -1;
     }
-    if (location.y > height - 100) {
-      window = new PVector(0, -(0.4*mass));
+    if (location.y < 0) {
+      location.y = 0;
+      velocity.y *= -1;
     }
+
     if (location.x > width) {
       location.x = width;
       velocity.x *= -1;
@@ -93,17 +92,6 @@ class Mover {
     if (location.x < 0) {
       location.x = 0;
       velocity.x *= -1;
-    }
-  }
-  
-  float montecarlo() {
-    while (true) {
-      float r1 = random(-1, 1);
-      float p = pow(1.0 - r1, 2.0);
-      float r2 = random(1);
-      if (r2 < p) {
-        return r1;
-      }
     }
   }
 }
