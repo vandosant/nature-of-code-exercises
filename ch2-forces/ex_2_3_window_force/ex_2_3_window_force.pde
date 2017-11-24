@@ -1,26 +1,37 @@
 int width = 640;
 int height = 640;
-Mover[] movers = new Mover[10];
+Mover[] movers = new Mover[50];
 
 void setup() 
 {
   size(640, 640);
   for (int i = 0; i < movers.length; i++) {
-    movers[i] = new Mover(140, 31, 71, random(10));
+    movers[i] = new Mover(140, 31, 71, random(8));
   }
 }
 
 void draw() {
   background(22, 20, 38);
   for (int i = 0; i < movers.length; i++) {
-    PVector windowX = new PVector(0.001, 0);
+    PVector forceX = new PVector(0.001, 0);
+    PVector forceY = new PVector(0, 0.001);
     float x = movers[i].location.x;
+    float y = movers[i].location.y;
+
     if (x < height / 2) {
-      PVector thisWindowX = PVector.mult(windowX, (height / 2) + (height - x));
-      movers[i].applyForce(thisWindowX);
+      PVector windowForce = PVector.mult(forceX, (height / 2) + (height - x));
+      movers[i].applyForce(windowForce);
     } else {
-      PVector thisWindowX = PVector.mult(windowX, -1 * ((height / 2) + x));
-      movers[i].applyForce(thisWindowX);
+      PVector windowForce = PVector.mult(forceX, -1 * ((height / 2) + x));
+      movers[i].applyForce(windowForce);
+    }
+    
+    if (y < width / 2) {
+      PVector windowForce = PVector.mult(forceY, (width / 2) + (width - x));
+      movers[i].applyForce(windowForce);
+    } else {
+      PVector windowForce = PVector.mult(forceY, -1 * ((width / 2) + x));
+      movers[i].applyForce(windowForce);
     }
 
     movers[i].update();
@@ -34,7 +45,7 @@ class Mover {
   float offset, mass;
 
   Mover(int r, int g, int b, float mass) {
-    location = new PVector(0, height);
+    location = new PVector(random(0, width), random(0, height));
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
     this.r = r;
