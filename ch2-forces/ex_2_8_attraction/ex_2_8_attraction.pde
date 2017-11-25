@@ -1,6 +1,6 @@
 int width = 1440;
 int height = 855;
-Mover[] movers = new Mover[20];
+Mover[] movers = new Mover[10];
 Attractor[] attractors = new Attractor[2];
 
 void setup() 
@@ -9,9 +9,9 @@ void setup()
   background(22, 20, 38);
   for (int i = 0; i < movers.length; i++) {
     if (random(0, 2) > 1) {
-      movers[i] = new Mover(140, 31, 71, random(2, 8), random(0, width), 0);
+      movers[i] = new Mover(140, 31, 71, random(2, 8), random(0, width / 2), 0);
     } else {
-      movers[i] = new Mover(140, 31, 71, random(2, 8), 0, random(0, height));
+      movers[i] = new Mover(140, 31, 71, random(2, 8), 0, random(0, height / 2));
     }
   }
   for (int i = 0; i < attractors.length; i++) {
@@ -77,11 +77,12 @@ class Mover {
 
 class Attractor {
   PVector location;
-  float m;
+  float m, G;
   
   Attractor(float x, float y, float m) {
     this.location = new PVector(x, y);
     this.m = m;
+    this.G = 0.4;
   }
   
   void display() {
@@ -94,7 +95,7 @@ class Attractor {
     PVector force = PVector.sub(location, mover.location);
     float distance = force.mag();
     distance = constrain(distance, 5.0, 25.0);
-    float strength = m * mover.mass;
+    float strength = G * m * mover.mass;
     force.normalize();
     return force.mult(strength / (distance * distance));
   }
