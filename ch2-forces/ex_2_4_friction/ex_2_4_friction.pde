@@ -16,13 +16,23 @@ void draw() {
   PVector wind = new PVector(0.01, 0);
 
   for (int i = 0; i < movers.length; i++) {
-    float c = 0.01;
-    PVector friction = movers[i].velocity.copy();
-    friction.mult(-1);
-    friction.normalize();
-    friction.mult(c);
+    float x = movers[i].location.x;
+    float y = movers[i].location.x;
     
-    movers[i].applyForce(friction);
+    if (x > width / 2 && y > height / 2) {
+      float c = 0.1;
+      PVector friction = movers[i].velocity.copy();
+      friction.normalize();
+      friction.mult(c);
+      movers[i].applyForce(friction);
+    } else {
+      float c = 0.1;
+      PVector friction = movers[i].velocity.copy();
+      friction.mult(-1);
+      friction.normalize();
+      friction.mult(c);
+      movers[i].applyForce(friction);
+    }
     movers[i].applyForce(gravity);
     movers[i].applyForce(wind);
 
@@ -60,7 +70,7 @@ class Mover {
     velocity.add(acceleration);
     location.add(velocity);
     acceleration.mult(0);
-
+    limit(50);
     checkEdges();
   }
   
@@ -75,6 +85,9 @@ class Mover {
     }
     if (velocity.y > max) {
       velocity.y = max; 
+    }
+    if (velocity.x < 0.1) {
+      velocity.x = 0.1;
     }
   }
   
