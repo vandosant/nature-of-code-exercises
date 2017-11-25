@@ -1,12 +1,12 @@
-int width = 640;
+int width = 940;
 int height = 640;
 Mover[] movers = new Mover[50];
 
 void setup() 
 {
-  size(640, 640);
+  size(940, 640);
   for (int i = 0; i < movers.length; i++) {
-    movers[i] = new Mover(140, 31, 71, random(8));
+    movers[i] = new Mover(140, 31, 71, random(1.5, 8));
   }
 }
 
@@ -87,8 +87,8 @@ class Mover {
   }
   
   void checkEdges() {
-    if (location.y > width) {
-      location.y = width;
+    if (location.y > height) {
+      location.y = height;
       velocity.y *= -1;
     }
     if (location.y < 0) {

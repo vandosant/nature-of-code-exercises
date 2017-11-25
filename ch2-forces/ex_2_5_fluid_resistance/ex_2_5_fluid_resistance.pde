@@ -1,11 +1,11 @@
 int width = 640;
-int height = 640;
+int height = 840;
 Mover[] movers = new Mover[50];
 Liquid liquid;
 
 void setup() 
 {
-  size(640, 640);
+  size(640, 840);
   for (int i = 0; i < movers.length; i++) {
     movers[i] = new Mover(140, 31, 71, random(2, 8));
   }
@@ -76,9 +76,10 @@ class Mover {
   }
   
   void checkEdges() {
-    if (location.y > width) {
-      location.y = width;
+    if (location.y > height) {
+      location.y = height;
     }
+
     if (location.y < 0) {
       location.y = 0;
     }
@@ -86,6 +87,7 @@ class Mover {
     if (location.x > width) {
       location.x = width;
     }
+
     if (location.x < 0) {
       location.x = 0;
     }
