@@ -1,11 +1,11 @@
-int width = 640;
-int height = 840;
+int width = 1440;
+int height = 855;
 Mover[] movers = new Mover[50];
 Liquid liquid;
 
 void setup() 
 {
-  size(640, 840);
+  size(1440, 855);
   for (int i = 0; i < movers.length; i++) {
     movers[i] = new Mover(140, 31, 71, random(2, 8));
   }
