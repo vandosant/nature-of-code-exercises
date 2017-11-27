@@ -12,22 +12,10 @@ void setup()
 
 void draw() {
   background(22, 20, 38);
-  PVector gravity = new PVector(0, 2);
-  PVector wind = new PVector(0.01, 0);
+  PVector gravity = new PVector(0, 0.1);
 
   for (int i = 0; i < movers.length; i++) {
-    float x = movers[i].location.x;
-    float y = movers[i].location.x;
-    
-    float c = 0.1;
-    PVector friction = movers[i].velocity.copy();
-    friction.mult(-1);
-    friction.normalize();
-    friction.mult(c);
-    movers[i].applyForce(friction);
     movers[i].applyForce(gravity);
-    movers[i].applyForce(wind);
-
     movers[i].update();
     movers[i].display();
   }
@@ -41,7 +29,7 @@ class Mover {
 
   Mover(int r, int g, int b, float mass) {
     location = new PVector(0, height);
-    velocity = new PVector(25, -20);
+    velocity = new PVector(5, -5);
     acceleration = new PVector(0, 0);
     this.r = r;
     this.g = g;
@@ -70,10 +58,10 @@ class Mover {
     velocity.add(acceleration);
     location.add(velocity);
     
-    aAcceleration = -1 * (velocity.y / 50);
+    aAcceleration = constrain(velocity.y / 50, -0.05, 0);
     aVelocity += aAcceleration;
     
-    limit(50);
+    limit(5);
 
     angle += aVelocity;
     acceleration.mult(0);
