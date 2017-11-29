@@ -17,17 +17,13 @@ void draw() {
     if (keyPressed) {
       if (key == CODED) {
         if (keyCode == LEFT) {
-          movers[i].turn(-0.1);
+          movers[i].turn(-0.05);
         } else if (keyCode == RIGHT) {
-          movers[i].turn(0.1);
-        } else if (keyCode == UP) {
-          PVector input = new PVector(0, -0.1);
-          movers[i].applyForce(input);
-        } else if (keyCode == DOWN) {
-          PVector input = new PVector(0, 0.1);
-          movers[i].applyForce(input);
+          movers[i].turn(0.05);
         }
-        
+        if (keyCode == UP) {
+          movers[i].accelerate();
+        }
       }
     }
 
@@ -52,7 +48,7 @@ class Mover {
     this.mass = mass;
     this.angle = 0;
     this.radians = 10;
-    this.theta = 0;
+    this.theta = 90;
   }
 
   void display() {
@@ -63,9 +59,9 @@ class Mover {
     translate(location.x, location.y);
     rotate(theta);
     triangle(
-      0, -10*mass,
-      -10*mass, 10*mass,
-      10*mass, 10*mass
+      0, 0,
+      -5*mass, 5*mass,
+      5*mass, 5*mass
     );
     popMatrix();
   }
@@ -88,6 +84,13 @@ class Mover {
     theta += delta;
   }
   
+  void accelerate() {
+    float x = 10 * cos(theta);
+    float y = 10 * sin(theta);
+    PVector force = new PVector(x, y);
+    applyForce(force);
+  }
+
   void limit(float max) {
     if (velocity.x > max) {
       velocity.x = max; 
