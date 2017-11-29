@@ -97,7 +97,9 @@ class Mover {
   
   void accelerate() {
     float angle = theta - PI/2;
-    PVector force = new PVector(cos(angle),sin(angle));
+    float x = cos(angle);
+    float y = sin(angle);
+    PVector force = new PVector(x, y);
     force.mult(0.3);
     applyForce(force);
   }
