@@ -1,35 +1,46 @@
 int width = 1440;
 int height = 840;
-Mover[] movers = new Mover[1];
+Mover mover;
 
 void setup() 
 {
   size(1440, 840);
-  for (int i = 0; i < movers.length; i++) {
-    movers[i] = new Mover(140, 31, 71, 4);
+  mover = new Mover(140, 31, 71, 4);
+}
+
+void keyPressed() {
+  if (key == CODED) {
+    if (keyCode == LEFT) {
+      mover.turn(-0.05);
+    }
+    if (keyCode == RIGHT) {
+      mover.turn(0.05);
+    }
+    if (keyCode == UP) {
+      mover.accelerate();
+    }
   }
 }
 
 void draw() {
   background(22, 20, 38);
 
-  for (int i = 0; i < movers.length; i++) {
-    if (keyPressed) {
-      if (key == CODED) {
-        if (keyCode == LEFT) {
-          movers[i].turn(-0.05);
-        } else if (keyCode == RIGHT) {
-          movers[i].turn(0.05);
-        }
-        if (keyCode == UP) {
-          movers[i].accelerate();
-        }
+  if (keyPressed) {
+    if (key == CODED) {
+      if (keyCode == LEFT) {
+        mover.turn(-0.05);
+      }
+      if (keyCode == RIGHT) {
+        mover.turn(0.05);
+      }
+      if (keyCode == UP) {
+        mover.accelerate();
       }
     }
-
-    movers[i].update();
-    movers[i].display();
   }
+
+  mover.update();
+  mover.display();
 }
 
 class Mover {
@@ -48,7 +59,7 @@ class Mover {
     this.mass = mass;
     this.angle = 0;
     this.radians = 10;
-    this.theta = 90;
+    this.theta = 0;
   }
 
   void display() {
@@ -59,7 +70,7 @@ class Mover {
     translate(location.x, location.y);
     rotate(theta);
     triangle(
-      0, 0,
+      0, -5*mass,
       -5*mass, 5*mass,
       5*mass, 5*mass
     );
@@ -72,7 +83,7 @@ class Mover {
     location.add(velocity);   
     acceleration.mult(0);
     checkEdges();
-    limit(1);
+    limit(2);
   }
   
   void applyForce(PVector force) {
@@ -85,9 +96,9 @@ class Mover {
   }
   
   void accelerate() {
-    float x = 10 * cos(theta);
-    float y = 10 * sin(theta);
-    PVector force = new PVector(x, y);
+    float angle = theta - PI/2;
+    PVector force = new PVector(cos(angle),sin(angle));
+    force.mult(0.3);
     applyForce(force);
   }
 
