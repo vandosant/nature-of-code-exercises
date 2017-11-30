@@ -7,7 +7,7 @@ void draw() {
   background(0);
   float period = 75;
   float amplitude = 100;
-  float y = amplitude + amplitude * cos(TWO_PI  * frameCount/period);
+  float y = amplitude + amplitude * sin(TWO_PI  * frameCount/period);
 
   stroke(255);
   fill(255);
