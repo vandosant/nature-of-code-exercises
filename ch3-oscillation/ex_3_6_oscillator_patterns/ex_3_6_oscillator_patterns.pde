@@ -36,9 +36,9 @@ class Oscillator  {
 
   void display()  {
     // Oscillating on the x-axis
-    float x = cos(angle.x) * amplitude.x;
+    float x = sin(angle.x) * amplitude.x;
     // Oscillating on the y-axis
-    float y = cos(angle.y) * amplitude.y;
+    float y = sin(angle.y) * amplitude.y;
 
     pushMatrix();
     translate(width/2,height/2);
