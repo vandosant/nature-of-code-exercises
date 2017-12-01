@@ -56,11 +56,12 @@ class Mover {
     rotate(angle);
     ellipse(
       0, 0,
-      10*mass, 3*mass
+      10*mass, 6*mass
     );
-    ellipse(
-      6*mass, 0,
-      3*mass, 3*mass
+    triangle(
+      10*mass, 0,
+      6*mass, -3*mass,
+      6*mass, 3*mass
     );
     smooth();
     popMatrix();
