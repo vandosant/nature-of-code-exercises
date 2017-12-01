@@ -1,11 +1,11 @@
-Oscillator[] oscillators = new Oscillator[10];
+Oscillator[] oscillators = new Oscillator[200];
 
 void setup () {
   size(640,640);
   for (int i = 0; i < oscillators.length; i++) {
     oscillators[i] = new Oscillator(
-      new PVector(0.003*i, 0.008*i),
-      new PVector(10*i, 10*i)
+      new PVector(0.003 + i*0.001, 0.008 + i*0.001),
+      new PVector(10 + i*2, 10 + i*2)
     );
   }
 }
@@ -36,18 +36,15 @@ class Oscillator  {
 
   void display()  {
     // Oscillating on the x-axis
-    float x = sin(angle.x)*amplitude.x;
+    float x = cos(angle.x) * amplitude.x;
     // Oscillating on the y-axis
-    float y = sin(angle.y)*amplitude.y;
+    float y = cos(angle.y) * amplitude.y;
 
     pushMatrix();
     translate(width/2,height/2);
-    stroke(255);
-    strokeWeight(2);
-    fill(175);
+    noStroke();
+    fill(141, 31, 71, 95);
     smooth();
-    // Drawing the Oscillator as a line connecting a circle
-    line(0,0,x,y);
     smooth();
     ellipse(x,y,16,16);
     popMatrix();
