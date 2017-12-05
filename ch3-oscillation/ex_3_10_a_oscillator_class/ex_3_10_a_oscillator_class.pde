@@ -5,7 +5,7 @@ float angleVel = 0.1;
 void setup () {
   size(1040,640);
   for (int i = 0; i < oscillators.length; i += 1) {
-    oscillators[i] = new Oscillator(new PVector(i*14, -0), 255);
+    oscillators[i] = new Oscillator(new PVector(i*14, 0), new PVector(10, height), 255);
   }
 }
 
@@ -24,27 +24,29 @@ void draw() {
 }
 
 class Oscillator  {
-  PVector origin;
-  float amplitude, angle, x, g;
+  PVector location, size;
+  float amplitude, angle, x, h;
 
-  Oscillator(PVector origin, float amplitude)  {
+  Oscillator(PVector origin, PVector size, float amplitude)  {
     this.angle = 0;
-    this.g = 0;
+    this.h = 0;
     this.amplitude = amplitude;
-    this.origin = origin;
+    this.location = origin;
+    this.size = size;
   }
 
   void oscillate(float angle)  {
-    g = map(sin(angle), -1, 1, 0, amplitude);
+    h = map(sin(angle), -1, 1, 0, amplitude);
   }
 
   void display()  {
-    float alpha = map(g, 0, 1, 0, 100);
+    float alpha = map(h, 0, 1, 0, 100);
     pushMatrix();
+    translate(location.x, location.y);
     noStroke();
     smooth();
-    fill(0, g, 0, alpha);
-    ellipse(origin.x,height/2,10,10);
+    fill(h, 0, 0, alpha);
+    rect(0, 0, size.x, size.y);
     popMatrix();
   }
 }
