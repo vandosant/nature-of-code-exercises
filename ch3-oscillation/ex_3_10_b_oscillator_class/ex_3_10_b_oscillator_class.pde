@@ -40,12 +40,12 @@ class Oscillator  {
   }
 
   void display()  {
-    float alpha = map(y, 0, 1, 0, 100);
+    float alpha = map(y, 0, 160, 20, 100);
     pushMatrix();
     translate(location.x, location.y);
     noStroke();
     smooth();
-    fill(y, 0, 0, alpha);
+    fill(255, 0, 0, alpha);
     rect(0, y, size.x, size.y - y * 2);
     popMatrix();
   }
