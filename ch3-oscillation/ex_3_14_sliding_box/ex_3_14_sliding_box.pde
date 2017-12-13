@@ -14,6 +14,7 @@ void setup()
 
 void draw() {
   background(22, 20, 38);
+  line(0, 0, width, (-sin(30)) * height);
   for (int i = 0; i < movers.length; i++) {  
     float angle = tan(movers[i].location.y/movers[i].location.x);
 
@@ -21,20 +22,25 @@ void draw() {
     if (1 - angle < slope) {
       movers[i].applyForce(PVector.mult(g, -1));
       movers[i].velocity.y = 0;
+      movers[i].turn(0.3);
+      float angularForce = 30;
+      float x = cos(angularForce);
+      float y = sin(angularForce);
+      PVector force = new PVector(x, y);
+      force.mult(0.3);
+      movers[i].applyForce(force);
     }
 
     movers[i].update();
     movers[i].checkEdges();
     movers[i].display();
   }
-
-  line(0, height - tan(slope) * width, width, height);
 }
 
 class Mover {
   PVector location, velocity, acceleration, gravity;
   int r, g, b;
-  float offset, mass;
+  float angle, offset, mass;
 
   Mover(int r, int g, int b, float mass) {
     location = new PVector(random(0, width), 0);
@@ -44,6 +50,7 @@ class Mover {
     this.g = g;
     this.b = b;
     this.mass = mass;
+    this.angle = 0;
   }
 
   void display() {
@@ -52,6 +59,7 @@ class Mover {
     
     pushMatrix();
     translate(location.x, location.y);
+    rotate(angle);
     rect(
       0, 0,
       10*mass, 10*mass
@@ -92,5 +100,10 @@ class Mover {
     if (location.x < 0) {
       location.x = 0;
     }
+  }
+
+  void turn(float a) {
+    println(a);
+    angle = a;
   }
 }
