@@ -9,7 +9,7 @@ void setup () {
 void draw () {
   background(0);
   
-  PVector force = new PVector(random(-1, 1), random(-1, 1));
+  PVector force = new PVector(0, random(0, 1));
   p.applyForce(force);
   if (!p.isDead()) {
     p.update();
@@ -27,8 +27,8 @@ class Particle {
     location = new PVector(x, y);
     mass = m;
     acceleration = new PVector(0, 0);
-    lifespan = 50;
-    velocity = new PVector(0, 0);
+    lifespan = 100;
+    velocity = new PVector(random(-1, 0), 0);
   }
   
   void applyForce (PVector f) {
@@ -36,7 +36,8 @@ class Particle {
   }
   
   void display () {
-    fill(125);
+    stroke(185);
+    fill(125, map(lifespan, 0, 1, 0, 255));
     ellipse(location.x, location.y, 3*mass, 3*mass); 
   }
   
