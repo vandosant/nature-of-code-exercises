@@ -23,7 +23,7 @@ class Particle {
   Particle (float x, float y, float m) {
     location = new PVector(x, y);
     mass = m;
-    angle = random(0, 90);
+    angle = random(0, TWO_PI*2);
     acceleration = new PVector(0, 0);
     lifespan = 255;
     velocity = new PVector(random(-1, 1), 0);
