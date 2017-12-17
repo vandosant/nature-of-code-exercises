@@ -9,7 +9,7 @@ void setup () {
 void draw () {
   background(0);
   
-  PVector force = new PVector(0, random(0, 1));
+  PVector force = new PVector(0, random(0, 0.5));
   p.applyForce(force);
   if (!p.isDead()) {
     p.update();
@@ -52,7 +52,7 @@ class Particle {
   }
   
   void update () {
-    angle += 0.1;
+    angle += map(lifespan, 0, 1, 0, 0.007);
     velocity.add(acceleration);
     location.add(velocity);
     acceleration.mult(0);
