@@ -5,14 +5,16 @@ ArrayList<ParticleSystem> systems;
 void setup () {
   size(640, 640);
   systems = new ArrayList<ParticleSystem>();
+  systems.add(new ParticleSystem(new PVector(width/2, height/2)));
+  ParticleSystem p = systems.get(0);
+  p.addParticle(p.origin.x, p.origin.y, 50);
 }
 
 void mousePressed () {
-  systems.add(new ParticleSystem(new PVector(mouseX, mouseY)));
   Iterator<ParticleSystem> it = systems.iterator();
   while (it.hasNext()) {
     ParticleSystem p = it.next();
-    p.addParticle();
+    p.splitParticle(mouseX, mouseY);
   }
 }
 
@@ -22,16 +24,12 @@ void draw () {
   while (it.hasNext()) {
     ParticleSystem p = it.next();
     p.run();
-    if (p.isEmpty()) {
-      it.remove();
-    }
   }
 }
 
 class Particle {
   PVector acceleration;
   float angle;
-  float lifespan;
   PVector location;
   float mass;
   PVector velocity;
@@ -40,7 +38,6 @@ class Particle {
     mass = m;
     angle = random(0, TWO_PI*2);
     acceleration = new PVector(0, 0);
-    lifespan = 255;
     velocity = new PVector(random(-1, 1), 0);
   }
 
@@ -53,7 +50,7 @@ class Particle {
     translate(location.x, location.y);
     rotate(angle);
     noStroke();
-    fill(125, lifespan);
+    fill(125);
     triangle(
       0, 0, 
       1.5*mass, 3*mass, 
@@ -63,15 +60,9 @@ class Particle {
   }
 
   void update () {
-    angle += map(lifespan, 0, 1, 0, 0.0005);
     velocity.add(acceleration);
     location.add(velocity);
     acceleration.mult(0);
-    lifespan -= 2.0;
-  }
-
-  boolean isDead () {
-    return lifespan <= 0;
   }
 }
 
@@ -84,8 +75,30 @@ class ParticleSystem {
     particles = new ArrayList<Particle>();
   }
 
-  void addParticle () {
-    particles.add(new Particle(origin.x, origin.y, 5));
+  void addParticle (float x, float y, float m) {
+    particles.add(new Particle(x, y, m));
+  }
+
+  void splitParticle (float x, float y) {
+    PVector clickLocation = new PVector(x, y);
+    Iterator<Particle> it = particles.iterator();
+    boolean isSplit = false;
+    float splitMass = 0;
+    PVector splitLocation = new PVector(0, 0);
+    while (it.hasNext()) {
+      Particle p = it.next();
+      PVector location = p.location.copy();
+      if (clickLocation.dist(location) < p.mass) {
+        it.remove();
+        isSplit = true;
+        splitLocation = location.copy();
+        splitMass = p.mass * 0.75;
+      }
+    }
+    if (isSplit) {
+      addParticle(splitLocation.x, splitLocation.y, splitMass);
+      addParticle(splitLocation.x, splitLocation.y, splitMass);
+    }
   }
 
   void run () {
@@ -94,13 +107,8 @@ class ParticleSystem {
     while (it.hasNext()) {
       Particle p = it.next();
       p.applyForce(force);
-      if (p.isDead()) {
-        it.remove();
-      }
-      if (!p.isDead()) {
-        p.update();
-        p.display();
-      }
+      p.update();
+      p.display();
     }
   }
 
