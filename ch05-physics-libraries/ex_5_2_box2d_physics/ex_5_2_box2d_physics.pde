@@ -25,10 +25,10 @@ void setup() {
 
 void draw() {
   background(255);
-  
+
   if (mousePressed) {
-    Box p = new Box(mouseX, mouseY);
-    boxes.add(p);
+    boxes.add(new Box(mouseX, mouseY, random(8,16), random(8,16)));
+    boxes.add(new Box(mouseX, mouseY, random(6,8), random(6,8)));
   }
   
   box2d.step();

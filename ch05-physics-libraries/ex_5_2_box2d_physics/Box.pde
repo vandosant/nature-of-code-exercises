@@ -10,9 +10,9 @@ class Box  {
   float w,h;
 
   // Constructor
-  Box(float _x, float _y) {
-    w = 16;
-    h = 16;
+  Box(float _x, float _y, float _w, float _h) {
+    w = _w;
+    h = _h;
     BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
     bd.position.set(box2d.coordPixelsToWorld(_x,_y));
@@ -38,7 +38,7 @@ class Box  {
     pushMatrix();
     fill(255,204,0);
     stroke(204, 102, 0);
-    strokeWeight(2);
+    strokeWeight(w/4);
     rectMode(CENTER);
     translate(pos.x,pos.y);
     rotate(-a);
@@ -52,7 +52,7 @@ class Box  {
     pushMatrix();
     fill(255,204,0);
     stroke(204, 102, 0);
-    strokeWeight(4);
+    strokeWeight(w/2);
     rectMode(CENTER);
     translate(pos.x,pos.y);
     rotate(-a);
