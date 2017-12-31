@@ -3,7 +3,6 @@ class Boundary  {
   Body body;
   float w,h;
 
-  // Constructor
   Boundary(float _x, float _y, float _w, float _h) {
     w = _w;
     h = _h;

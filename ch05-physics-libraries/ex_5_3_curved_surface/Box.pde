@@ -18,13 +18,11 @@ class Box  {
     bd.position.set(box2d.coordPixelsToWorld(_x,_y));
     body = box2d.createBody(bd);
 
-    PolygonShape ps = new PolygonShape();
-    float boxW = box2d.scalarPixelsToWorld(w/2);
-    float boxH = box2d.scalarPixelsToWorld(h/2);
-    ps.setAsBox(boxW,boxH);
+    CircleShape s = new CircleShape();
+    s.m_radius = box2d.scalarPixelsToWorld(w/2);
     
     FixtureDef fd = new FixtureDef();
-    fd.shape = ps;
+    fd.shape = s;
     fd.density = 1;
     fd.friction = 0.9;
     fd.restitution = 0.8;
@@ -38,11 +36,11 @@ class Box  {
     pushMatrix();
     fill(255,204,0);
     stroke(204, 102, 0);
-    strokeWeight(w/4);
+    strokeWeight(2);
     rectMode(CENTER);
     translate(pos.x,pos.y);
     rotate(-a);
-    rect(0,0,w,h);
+    ellipse(0,0,w,w);
     popMatrix();
   }
   
