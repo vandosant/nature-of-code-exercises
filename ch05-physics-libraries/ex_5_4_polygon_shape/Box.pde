@@ -18,15 +18,12 @@ class Box  {
     bd.position.set(box2d.coordPixelsToWorld(_x,_y));
     body = box2d.createBody(bd);
 
-    Vec2[] vertices = new Vec2[8];
-    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(-15,30));
-    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(15,30));
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(15,-30));
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(5,-40));
-    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(5,-45));
-    vertices[5] = box2d.vectorPixelsToWorld(new Vec2(-5,-45));
-    vertices[6] = box2d.vectorPixelsToWorld(new Vec2(-5,-40));
-    vertices[7] = box2d.vectorPixelsToWorld(new Vec2(-15,-30));
+    Vec2[] vertices = new Vec2[5];
+    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(0,25));
+    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(20,0));
+    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(7,-15));
+    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(-7,-15));
+    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(-20,0));
     PolygonShape s = new PolygonShape();
     s.set(vertices, vertices.length);
     
