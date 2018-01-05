@@ -10,24 +10,25 @@ class Box  {
     bd.type = BodyType.DYNAMIC;
     bd.position.set(box2d.coordPixelsToWorld(_x,_y));
     body = box2d.createBody(bd);
+    Vec2 offset = new Vec2(0,-h/2);
 
     Vec2[] vertices = new Vec2[5];
-    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(0,25));
-    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(20,0));
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(10,-10));
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(-10,-10));
-    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(-20,0));
+    vertices[0] = box2d.vectorPixelsToWorld(new Vec2(0,35+offset.y));
+    vertices[1] = box2d.vectorPixelsToWorld(new Vec2(20,10+offset.y));
+    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(10,offset.y));
+    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(-10,offset.y));
+    vertices[4] = box2d.vectorPixelsToWorld(new Vec2(-20,10+offset.y));
     PolygonShape s = new PolygonShape();
     s.set(vertices, vertices.length);
 
     PolygonShape s2 = new PolygonShape();
-    Vec2 offset = new Vec2(0,-h/2);
+
     Vec2[] vertices2 = new Vec2[5];
-    vertices2[0] = box2d.vectorPixelsToWorld(new Vec2(-20,25+offset.y));
-    vertices2[1] = box2d.vectorPixelsToWorld(new Vec2(20,25+offset.y));
-    vertices2[2] = box2d.vectorPixelsToWorld(new Vec2(10,-10+offset.y));
-    vertices2[3] = box2d.vectorPixelsToWorld(new Vec2(0,-25+offset.y));
-    vertices2[4] = box2d.vectorPixelsToWorld(new Vec2(-20,0+offset.y));
+    vertices2[0] = box2d.vectorPixelsToWorld(new Vec2(-10,offset.y));
+    vertices2[1] = box2d.vectorPixelsToWorld(new Vec2(10,offset.y));
+    vertices2[2] = box2d.vectorPixelsToWorld(new Vec2(20,-10+offset.y));
+    vertices2[3] = box2d.vectorPixelsToWorld(new Vec2(-20,-10+offset.y));
+    vertices2[4] = box2d.vectorPixelsToWorld(new Vec2(0,-35+offset.y));
 
     offset = box2d.vectorPixelsToWorld(offset);
     s2.set(vertices2, vertices2.length);
