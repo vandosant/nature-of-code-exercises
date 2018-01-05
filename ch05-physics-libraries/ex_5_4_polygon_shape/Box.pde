@@ -21,8 +21,8 @@ class Box  {
     Vec2[] vertices = new Vec2[5];
     vertices[0] = box2d.vectorPixelsToWorld(new Vec2(0,25));
     vertices[1] = box2d.vectorPixelsToWorld(new Vec2(20,0));
-    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(7,-15));
-    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(-7,-15));
+    vertices[2] = box2d.vectorPixelsToWorld(new Vec2(10,-10));
+    vertices[3] = box2d.vectorPixelsToWorld(new Vec2(-10,-10));
     vertices[4] = box2d.vectorPixelsToWorld(new Vec2(-20,0));
     PolygonShape s = new PolygonShape();
     s.set(vertices, vertices.length);
